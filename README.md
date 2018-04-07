@@ -1,10 +1,11 @@
-# node-red-contrib-elasticsearch3
+# node-red-contrib-elasticsearch7
 
+A Fork from @chameleonbr   node-red-contrib-elasticsearch3   which is
 A Fork from @jeffdonthemic node-red-contrib-elasticsearch-jd
 
 ## Changelog 0.0.7
 
-* new Aggregation Node
+* new Aggregation Node which puts the entire ES Response in payload  msg.payload = { <es response> }  
 
 
 A set of [Node-RED](http://www.nodered.org) nodes for Elasticsearch including search, get, exists, create, update and delete.
