@@ -48,7 +48,7 @@ module.exports = function (RED) {
             var params = {
                 size: maxResults,
                 sort: sort,
-                _sourceInclude: includeFields
+                _source_includes: includeFields
             };
             if (documentIndex !== '')
                 params.index = documentIndex;
