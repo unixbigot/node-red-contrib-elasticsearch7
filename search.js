@@ -17,6 +17,7 @@ module.exports = function (RED) {
             var documentType = config.documentType;
             var query = config.query;
             var maxResults = config.maxResults;
+            var resultOffset = config.resultOffset;
             var sort = config.sort;
             var includeFields = config.includeFields;
 
@@ -33,6 +34,9 @@ module.exports = function (RED) {
             if (msg.hasOwnProperty("maxResults")) {
                 maxResults = msg.maxResults;
             }
+            if (msg.hasOwnProperty("resultOffset")) {
+                resultOffset = msg.resultOffset;
+            }
             if (msg.hasOwnProperty("sort")) {
                 sort = msg.sort;
             }
@@ -47,6 +51,7 @@ module.exports = function (RED) {
             // construct the search params
             var params = {
                 size: maxResults,
+		from: resultOffset,
                 sort: sort,
                 _source_includes: includeFields
             };
