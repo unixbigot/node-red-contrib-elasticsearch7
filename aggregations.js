@@ -16,9 +16,7 @@ module.exports = function (RED) {
             var documentIndex = config.documentIndex;
             var documentType = config.documentType;
             var query = config.query;
-            var maxResults = config.maxResults;
-            var sort = config.sort;
-            var includeFields = config.includeFields;
+            var aggregations = config.aggregations;
 
             // check for overriding message properties
             if (msg.hasOwnProperty("documentIndex")) {
@@ -30,44 +28,33 @@ module.exports = function (RED) {
             if (msg.hasOwnProperty("query")) {
                 query = msg.query;
             }
-            if (msg.hasOwnProperty("maxResults")) {
-                maxResults = msg.maxResults;
-            }
-            if (msg.hasOwnProperty("sort")) {
-                sort = msg.sort;
-            }
-            if (msg.hasOwnProperty("includeFields")) {
-                includeFields = msg.includeFields;
-            }
-
-            if (typeof includeFields !== "undefined" && includeFields.indexOf(",") > 0) {
-                includeFields = includeFields.split(",");
+            if (msg.hasOwnProperty("aggregations")) {
+                aggregations = msg.aggregations;
             }
 
             // construct the search params
             var params = {
-                size: maxResults,
-                sort: sort,
-                _sourceInclude: includeFields
+                size: 0
             };
             if (documentIndex !== '')
                 params.index = documentIndex;
             if (documentType !== '')
                 params.type = documentType;
 
-
-
             if (msg.hasOwnProperty("body")) {
                 params.body = msg.body;
             } else {
-                params.body = {
-                    query: {
+                params.body = {}
+		if (query !== '') {
+		    params.body.query = {
                         query_string: {
                             query: query
                         }
                     }
-                };
+		}
+		params.body.aggs = aggregations
             }
+	    console.log("elasticsearch aggregation params", JSON.stringify(params,null,'  '))
             client.search(params).then(function (resp) {
                 msg.payload = resp;
                 node.send(msg);
